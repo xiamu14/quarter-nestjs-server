@@ -1,0 +1,61 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Task {
+  id          String    @id @default(cuid())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  title       String    @db.VarChar(255)
+  status      Status    @default(Pending)
+  userId      String    @default("")
+  priority    Int?      @default(0)
+  date        DateTime?
+  start       DateTime?
+  expectEnd   DateTime?
+  tagId       String?
+  description String?   @default("")
+  tag         Tag?      @relation(fields: [tagId], references: [id])
+}
+
+enum Status {
+  Pending
+  Finish
+}
+
+model Tag {
+  id        String    @id @default(cuid())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  name      String
+  color     String    @default("")
+  status    TagStatus @default(Active)
+  userId    String    @default("")
+  targets   Target[]
+  tasks     Task[]
+}
+
+enum TagStatus {
+  Active
+  Inactive
+}
+
+model Target {
+  id          String    @id @default(cuid())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  name        String
+  userId      String    @default("")
+  tag         Tag?      @relation(fields: [tagId], references: [id])
+  tagId       String?
+  date        DateTime?
+  description String?   @default("")
+}
