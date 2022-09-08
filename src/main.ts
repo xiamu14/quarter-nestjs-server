@@ -17,7 +17,7 @@ async function bootstrap() {
     origin: [
       'http://localhost:3002',
       'http://localhost:3004',
-      'https://quarter.vercel.com',
+      'https://quarter.vercel.app',
     ],
   });
 
