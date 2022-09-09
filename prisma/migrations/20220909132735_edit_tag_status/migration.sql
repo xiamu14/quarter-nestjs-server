@@ -28,7 +28,7 @@ alter table "Tag" rename column "status" to "_Status";
 -- 4. add new column of new type
 alter table "Tag" add "status" "TagStatus" not null default 'Doing';
 -- 5. copy values to the new column
-update "Tag" set "status" = "_Status"::text::"ProjectStatus";
+update "Tag" set "status" = "_Status"::text::"TagStatus";
 -- -- 6. remove old column and type
 alter table "Tag" drop column "_Status";
 drop type "_TagStatus";
