@@ -25,6 +25,6 @@ export class TagsService {
       matcher.editValue('tasks', (it) => transformTaskToClient(it));
       return matcher.data;
     }
-    return tags;
+    return [];
   }
 }

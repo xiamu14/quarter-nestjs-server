@@ -37,15 +37,15 @@ model Tag {
   updatedAt DateTime  @updatedAt
   name      String
   color     String    @default("")
-  status    TagStatus @default(Active)
+  status    TagStatus @default(Doing)
   userId    String    @default("")
   targets   Target[]
   tasks     Task[]
 }
 
 enum TagStatus {
-  Active
-  Inactive
+  Archive
+  Doing
 }
 
 model Target {
