@@ -32,21 +32,15 @@ enum Status {
 }
 
 model Tag {
-  id        String        @id @default(cuid())
-  createdAt DateTime      @default(now())
-  updatedAt DateTime      @updatedAt
+  id        String    @id @default(cuid())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
   name      String
-  color     String        @default("")
-  status    TagStatus     @default(Doing)
-  state     ProjectStatus @default(Doing)
-  userId    String        @default("")
+  color     String    @default("")
+  status    TagStatus @default(Doing)
+  userId    String    @default("")
   targets   Target[]
   tasks     Task[]
-}
-
-enum ProjectStatus {
-  Archive
-  Doing
 }
 
 enum TagStatus {
