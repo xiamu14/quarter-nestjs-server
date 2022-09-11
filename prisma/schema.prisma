@@ -49,13 +49,20 @@ enum TagStatus {
 }
 
 model Target {
-  id          String    @id @default(cuid())
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id          String       @id @default(cuid())
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
   name        String
-  userId      String    @default("")
-  tag         Tag?      @relation(fields: [tagId], references: [id])
+  userId      String       @default("")
+  status      TargetStatus @default(Doing)
+  tag         Tag?         @relation(fields: [tagId], references: [id])
   tagId       String?
   date        DateTime?
-  description String?   @default("")
+  description String?      @default("")
+}
+
+enum TargetStatus {
+  Doing
+  Abandon
+  Success
 }

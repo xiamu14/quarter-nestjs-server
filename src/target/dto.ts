@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { TargetStatus } from '@prisma/client';
 
 export class CreateTargetInput {
   @ApiProperty({ type: 'string' })
@@ -23,6 +24,13 @@ export class UpdateTargetInput {
 
   @ApiProperty({ type: 'string', nullable: true })
   userId: string;
+
+  @ApiProperty({
+    enum: TargetStatus,
+    required: false,
+    description: '目标的状态：进行中，放弃，达成',
+  })
+  status?: TargetStatus;
 
   @ApiProperty({ type: 'number', nullable: true })
   date?: number;
