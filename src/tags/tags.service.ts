@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { TagStatus } from '@prisma/client';
-import { Matcher } from 'data-matcher';
-import { transformTaskToClient } from '../lib/utils';
+import { transformTagsToClient } from '../lib/utils';
 import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
@@ -21,9 +20,8 @@ export class TagsService {
       },
     });
     if (tags.length > 0) {
-      const matcher = new Matcher(tags);
-      matcher.editValue('tasks', (it) => transformTaskToClient(it));
-      return matcher.data;
+      const data = transformTagsToClient(tags);
+      return data;
     }
     return [];
   }

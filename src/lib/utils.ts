@@ -1,4 +1,4 @@
-import { Target, Task } from '@prisma/client';
+import { Tag, Target, Task } from '@prisma/client';
 import { Matcher } from 'data-matcher';
 import { CreateTaskInput, UpdateTaskInput } from '../task/dto';
 import { CreateTargetInput, UpdateTargetInput } from './../target/dto';
@@ -77,5 +77,18 @@ export function transformTargetToClient(data: Target | Target[]) {
   const matcher = new Matcher(data);
   matcher.editValue('date', handleFormatter);
 
+  return matcher.data;
+}
+
+interface TagWithTasks extends Tag {
+  tasks: Task[];
+}
+
+export function transformTagsToClient(data: TagWithTasks[]) {
+  const matcher = new Matcher(data);
+  matcher
+    .editValue('createdAt', handleFormatter)
+    .editValue('updatedAt', handleFormatter)
+    .editValue('tasks', (it) => transformTaskToClient(it));
   return matcher.data;
 }
