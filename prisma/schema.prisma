@@ -17,10 +17,10 @@ model Task {
   title       String    @db.VarChar(255)
   status      Status    @default(Pending)
   userId      String    @default("")
+  duration    Int       @default(15)
   priority    Int?      @default(0)
   date        DateTime?
-  start       DateTime?
-  expectEnd   DateTime?
+  start       String?
   tagId       String?
   description String?   @default("")
   tag         Tag?      @relation(fields: [tagId], references: [id])

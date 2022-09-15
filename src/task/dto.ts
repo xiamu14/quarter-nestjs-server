@@ -12,11 +12,11 @@ export class CreateTaskInput {
   @ApiProperty({ type: 'string' })
   title: string;
 
-  @ApiProperty({ type: 'number', nullable: true })
-  start?: number;
+  @ApiProperty({ type: 'number' })
+  duration: number;
 
-  @ApiProperty({ type: 'number', nullable: true })
-  expectEnd?: number;
+  @ApiProperty({ type: 'string', nullable: true })
+  start?: string;
 
   @ApiProperty({ type: 'number', nullable: true })
   date?: number;
@@ -46,10 +46,10 @@ export class UpdateTaskInput {
   title?: string;
 
   @ApiProperty({ type: 'number', nullable: true })
-  start?: number;
+  duration?: number;
 
-  @ApiProperty({ type: 'number', nullable: true })
-  expectEnd?: number;
+  @ApiProperty({ type: 'string', nullable: true })
+  start?: string;
 
   @ApiProperty({ type: 'number', nullable: true })
   date?: number;

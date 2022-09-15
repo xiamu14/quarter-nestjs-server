@@ -6,9 +6,8 @@ export enum Status {
 }
 
 export interface TaskClient
-  extends Omit<Task, 'start' | 'expectEnd' | 'createdAt' | 'updatedAt'> {
+  extends Omit<Task, 'start' | 'createdAt' | 'updatedAt'> {
   start: number | null;
-  expectEnd: number | null;
   createdAt: number;
   updatedAt: number;
   tag: string | null;
@@ -18,7 +17,6 @@ export interface TaskClient
 export interface TaskInput {
   title: string;
   start?: number;
-  expectEnd?: number;
   date?: number;
   status: string;
   tag?: string;

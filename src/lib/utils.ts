@@ -8,11 +8,8 @@ export function transformTaskToClient(data: Task | Task[]) {
   } else {
     const matcher = new Matcher(data);
     matcher
-      .editValue('createdAt', handleFormatter)
-      .editValue('updatedAt', handleFormatter)
-      .editValue('start', handleFormatter)
       .editValue('date', handleFormatter)
-      .editValue('expectEnd', handleFormatter);
+      .delete(['createdAt', 'updatedAt']);
     return matcher.data;
   }
 }
@@ -24,8 +21,6 @@ const handleFormatter = (it: string) => {
 export function transformTaskForCreate(data: CreateTaskInput) {
   const matcher = new Matcher(data);
   matcher
-    .editValue('start', (it) => (it ? new Date(it) : it))
-    .editValue('expectEnd', (it) => (it ? new Date(it) : it))
     .editValue('date', (it) => (it ? new Date(it) : it))
     .editValue('tag', (it) => {
       return {
@@ -38,8 +33,6 @@ export function transformTaskForCreate(data: CreateTaskInput) {
 export function transformTaskForUpdate(data: UpdateTaskInput) {
   const matcher = new Matcher(data);
   matcher
-    .editValue('start', (it) => (it ? new Date(it) : it))
-    .editValue('expectEnd', (it) => (it ? new Date(it) : it))
     .editValue('date', (it) => (it ? new Date(it) : it))
     .editValue('tag', (it) => {
       return {
@@ -75,7 +68,7 @@ export function transformTargetForDb(
 
 export function transformTargetToClient(data: Target | Target[]) {
   const matcher = new Matcher(data);
-  matcher.editValue('date', handleFormatter);
+  matcher.editValue('date', handleFormatter).delete(['createdAt', 'updatedAt']);
 
   return matcher.data;
 }
@@ -87,8 +80,7 @@ interface TagWithTasks extends Tag {
 export function transformTagsToClient(data: TagWithTasks[]) {
   const matcher = new Matcher(data);
   matcher
-    .editValue('createdAt', handleFormatter)
-    .editValue('updatedAt', handleFormatter)
-    .editValue('tasks', (it) => transformTaskToClient(it));
+    .editValue('tasks', (it) => transformTaskToClient(it))
+    .delete(['createdAt', 'updatedAt']);
   return matcher.data;
 }
