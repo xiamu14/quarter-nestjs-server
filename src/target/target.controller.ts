@@ -7,11 +7,18 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
-import { ApiBody, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { CreateTargetInput, UpdateTargetInput } from './dto';
+import {
+  ApiBody,
+  ApiQuery,
+  ApiTags,
+} from '@nestjs/swagger';
+import {
+  CreateTargetInput,
+  UpdateTargetInput,
+} from './dto';
 import { TargetService } from './target.service';
 
-@ApiTags('target')
+@ApiTags('Target')
 @Controller('target')
 export class TargetController {
   constructor(private readonly service: TargetService) {}
@@ -30,7 +37,10 @@ export class TargetController {
     @Query('userId') userId: string,
     @Query('tagId') tagId?: string,
   ) {
-    const data = await this.service.getAll({ userId, tagId });
+    const data = await this.service.getAll({
+      userId,
+      tagId,
+    });
     return data;
   }
 

@@ -3,7 +3,7 @@ import { ApiQuery, ApiTags } from '@nestjs/swagger';
 import { TagStatus } from '@prisma/client';
 import { TagsService } from './tags.service';
 
-@ApiTags('tags')
+@ApiTags('Tags')
 @Controller('tags')
 export class TagsController {
   constructor(private service: TagsService) {}

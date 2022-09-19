@@ -7,7 +7,11 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
-import { ApiBody, ApiQuery, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBody,
+  ApiQuery,
+  ApiTags,
+} from '@nestjs/swagger';
 import { CreateTaskInput, UpdateTaskInput } from './dto';
 import { TaskService } from './task.service';
 

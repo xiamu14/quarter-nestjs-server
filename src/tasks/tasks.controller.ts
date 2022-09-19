@@ -1,7 +1,7 @@
 import { Controller, Get, Query } from '@nestjs/common';
-import { ApiQuery } from '@nestjs/swagger';
+import { ApiQuery, ApiTags } from '@nestjs/swagger';
 import { TasksService } from './tasks.service';
-
+@ApiTags('Tasks')
 @Controller('tasks')
 export class TasksController {
   constructor(private service: TasksService) {}

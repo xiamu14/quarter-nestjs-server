@@ -1,4 +1,9 @@
-import { Body, Controller, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { CreateTagInput, UpdateTagInput } from './dto';
 import { TagService } from './tag.service';
