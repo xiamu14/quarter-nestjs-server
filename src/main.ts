@@ -25,6 +25,7 @@ async function bootstrap() {
       'http://localhost:3002',
       'http://localhost:3004',
       'https://quarter.vercel.app',
+      'https://quarter.oneeeday.work',
     ],
   });
 
