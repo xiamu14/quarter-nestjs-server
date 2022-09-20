@@ -18,6 +18,9 @@ export class TagsService {
         },
         targets: true,
       },
+      orderBy: {
+        createdAt: 'asc',
+      },
     });
     if (tags.length > 0) {
       const data = transformTagsToClient(tags);
