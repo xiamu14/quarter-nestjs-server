@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AuthModule } from './auth/auth.module';
-import { TagModule } from './tag/tag.module';
-import { TagsModule } from './tags/tags.module';
+import { ProjectModule } from './project/project.module';
+import { ProjectsModule } from './projects/projects.module';
 import { TargetModule } from './target/target.module';
 import { TaskModule } from './task/task.module';
 import { TasksModule } from './tasks/tasks.module';
@@ -9,11 +9,11 @@ import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
-    TagModule,
+    ProjectModule,
     TaskModule,
     TargetModule,
     TasksModule,
-    TagsModule,
+    ProjectsModule,
     AuthModule,
     UsersModule,
   ],

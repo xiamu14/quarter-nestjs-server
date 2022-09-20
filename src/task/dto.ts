@@ -7,9 +7,6 @@ enum Status {
 
 export class CreateTaskInput {
   @ApiProperty({ type: 'string' })
-  userId: string;
-
-  @ApiProperty({ type: 'string' })
   title: string;
 
   @ApiProperty({ type: 'number' })
@@ -31,16 +28,16 @@ export class CreateTaskInput {
   })
   status: string;
 
-  @ApiProperty({ type: 'string', description: 'tag Id' })
-  tag: string;
+  @ApiProperty({
+    type: 'string',
+    description: 'project Id',
+  })
+  project: string;
 }
 
 export class UpdateTaskInput {
   @ApiProperty({ type: 'string' })
   id: string;
-
-  @ApiProperty({ type: 'string' })
-  userId: string;
 
   @ApiProperty({ type: 'string', nullable: true })
   title?: string;
@@ -54,7 +51,11 @@ export class UpdateTaskInput {
   @ApiProperty({ type: 'number', nullable: true })
   date?: number;
 
-  @ApiProperty({ type: 'string', required: false, nullable: true })
+  @ApiProperty({
+    type: 'string',
+    required: false,
+    nullable: true,
+  })
   description?: string;
 
   @ApiProperty({
@@ -64,6 +65,10 @@ export class UpdateTaskInput {
   })
   status?: string;
 
-  @ApiProperty({ type: 'string', nullable: true, description: 'tag Id' })
-  tag?: string;
+  @ApiProperty({
+    type: 'string',
+    description: 'project Id',
+    required: false,
+  })
+  project?: string;
 }

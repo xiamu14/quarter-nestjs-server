@@ -6,12 +6,17 @@ import {
   Post,
   Put,
   Query,
+  Req,
+  UseGuards,
 } from '@nestjs/common';
 import {
+  ApiBearerAuth,
   ApiBody,
   ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
+import { User } from '@prisma/client';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CreateTaskInput, UpdateTaskInput } from './dto';
 import { TaskService } from './task.service';
 
@@ -21,6 +26,8 @@ export class TaskController {
   constructor(private readonly service: TaskService) {}
 
   @Get('/')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiQuery({
     name: 'id',
     required: true,
@@ -31,14 +38,22 @@ export class TaskController {
   }
 
   @Post('/')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiBody({
     required: true,
     type: CreateTaskInput,
   })
-  async create(@Body() createTaskInput: CreateTaskInput) {
-    console.log('---', createTaskInput);
+  async create(
+    @Req()
+    req: { user: User },
+    @Body() data: CreateTaskInput,
+  ) {
     try {
-      await this.service.createTask(createTaskInput);
+      await this.service.createTask({
+        ...data,
+        user: { connect: { id: req.user.id } },
+      });
       return { data: 'success' };
     } catch (error) {
       console.error(error);
@@ -47,12 +62,13 @@ export class TaskController {
   }
 
   @Put('/')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiBody({
     required: true,
     type: UpdateTaskInput,
   })
   async update(@Body() updateTaskInput: UpdateTaskInput) {
-    console.log('---', updateTaskInput);
     try {
       await this.service.updateTask(updateTaskInput);
       return { data: 'success' };
@@ -62,6 +78,8 @@ export class TaskController {
   }
 
   @Delete('/')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiQuery({
     name: 'id',
     required: true,

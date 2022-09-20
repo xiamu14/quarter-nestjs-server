@@ -1,13 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { CreateTagInput, UpdateTagInput } from './dto';
+import {
+  CreateProjectInput,
+  UpdateProjectInput,
+} from './dto';
+
+interface CreateProjectInputDb extends CreateProjectInput {
+  user: { connect: { id: string } };
+}
 
 @Injectable()
-export class TagService {
+export class ProjectService {
   constructor(private prisma: PrismaService) {}
 
-  create(data: CreateTagInput) {
-    return this.prisma.tag.create({
+  create(data: CreateProjectInputDb) {
+    return this.prisma.project.create({
       data: {
         ...data,
         tasks: {
@@ -20,8 +27,8 @@ export class TagService {
     });
   }
 
-  update(data: UpdateTagInput) {
-    return this.prisma.tag.update({
+  update(data: UpdateProjectInput) {
+    return this.prisma.project.update({
       data,
       where: { id: data.id },
     });

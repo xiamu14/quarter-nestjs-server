@@ -1,5 +1,17 @@
-import { Controller, Get, Query } from '@nestjs/common';
-import { ApiQuery, ApiTags } from '@nestjs/swagger';
+import {
+  Controller,
+  Get,
+  Query,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
+import {
+  ApiBearerAuth,
+  ApiQuery,
+  ApiTags,
+} from '@nestjs/swagger';
+import { User } from '@prisma/client';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { TasksService } from './tasks.service';
 @ApiTags('Tasks')
 @Controller('tasks')
@@ -7,41 +19,39 @@ export class TasksController {
   constructor(private service: TasksService) {}
 
   @Get('/week')
-  @ApiQuery({
-    type: 'string',
-    name: 'userId',
-  })
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiQuery({
     type: 'string',
     name: 'week',
     description: '周一的日期时间戳：1662307200000',
   })
   async getTasksOnWeek(
-    @Query('userId') userId: string,
+    @Req()
+    req: { user: User },
     @Query('week') week: string,
   ) {
     return this.service.getTasksOnWeek({
-      userId,
-      week,
+      userId: req.user.id,
+      week: week,
     });
   }
 
   @Get('/day')
-  @ApiQuery({
-    type: 'string',
-    name: 'userId',
-  })
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiQuery({
     type: 'string',
     name: 'day',
     description: '某一天的时间戳：1662307200000',
   })
   async getTasksOnDay(
-    @Query('userId') userId: string,
+    @Req()
+    req: { user: User },
     @Query('day') day: string,
   ) {
     return this.service.getTasksOnDay({
-      userId,
+      userId: req.user.id,
       day,
     });
   }

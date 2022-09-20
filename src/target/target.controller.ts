@@ -6,12 +6,15 @@ import {
   Post,
   Put,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import {
+  ApiBearerAuth,
   ApiBody,
   ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import {
   CreateTargetInput,
   UpdateTargetInput,
@@ -24,37 +27,28 @@ export class TargetController {
   constructor(private readonly service: TargetService) {}
 
   @Get('/all')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiQuery({
     type: 'string',
-    name: 'userId',
+    name: 'projectId',
+    required: true,
   })
-  @ApiQuery({
-    type: 'string',
-    name: 'tagId',
-    required: false,
-  })
-  async getAll(
-    @Query('userId') userId: string,
-    @Query('tagId') tagId?: string,
-  ) {
+  async getAll(@Query('projectId') projectId: string) {
     const data = await this.service.getAll({
-      userId,
-      tagId,
+      projectId,
     });
     return data;
   }
 
   @Post('/')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiBody({
     required: true,
     type: CreateTargetInput,
   })
   async createTarget(@Body() data?: CreateTargetInput) {
-    console.log(
-      '%c data',
-      'color:white;background: rgb(83,143,204);padding:4px',
-      data,
-    );
     if (data) {
       await this.service.create(data);
       return { data: 'success' };
@@ -63,6 +57,8 @@ export class TargetController {
   }
 
   @Put('/')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiBody({
     required: true,
     type: UpdateTargetInput,
@@ -76,6 +72,8 @@ export class TargetController {
   }
 
   @Delete('/')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiQuery({
     name: 'id',
     required: true,

@@ -32,6 +32,15 @@ export class UsersService {
           password: await hash(userDto.password, 10),
         },
       });
+    await this.prisma.project.create({
+      data: {
+        name: '默认',
+        color: '#eaf6e1',
+        user: {
+          connect: { id: rest.id },
+        },
+      },
+    });
     return rest;
   }
 
@@ -63,7 +72,7 @@ export class UsersService {
 
   async findByPayload({ sub }: any): Promise<any> {
     const { password: _, ...rest } =
-      await this.prisma.user.findFirst({
+      await this.prisma.user.findUnique({
         where: { id: sub },
       });
     return rest;

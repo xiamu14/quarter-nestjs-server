@@ -1,7 +1,13 @@
-import { Tag, Target, Task } from '@prisma/client';
+import { Project, Target, Task } from '@prisma/client';
 import { Matcher } from 'data-matcher';
-import { CreateTaskInput, UpdateTaskInput } from '../task/dto';
-import { CreateTargetInput, UpdateTargetInput } from './../target/dto';
+import {
+  CreateTaskInput,
+  UpdateTaskInput,
+} from '../task/dto';
+import {
+  CreateTargetInput,
+  UpdateTargetInput,
+} from './../target/dto';
 export function transformTaskToClient(data: Task | Task[]) {
   if (Array.isArray(data) && data.length === 0) {
     return data;
@@ -18,11 +24,13 @@ const handleFormatter = (it: string) => {
   return it ? new Date(it).getTime() : it;
 };
 
-export function transformTaskForCreate(data: CreateTaskInput) {
+export function transformTaskForCreate(
+  data: CreateTaskInput,
+) {
   const matcher = new Matcher(data);
   matcher
     .editValue('date', (it) => (it ? new Date(it) : it))
-    .editValue('tag', (it) => {
+    .editValue('project', (it) => {
       return {
         connect: { id: it },
       };
@@ -30,11 +38,13 @@ export function transformTaskForCreate(data: CreateTaskInput) {
   return matcher.data;
 }
 
-export function transformTaskForUpdate(data: UpdateTaskInput) {
+export function transformTaskForUpdate(
+  data: UpdateTaskInput,
+) {
   const matcher = new Matcher(data);
   matcher
     .editValue('date', (it) => (it ? new Date(it) : it))
-    .editValue('tag', (it) => {
+    .editValue('project', (it) => {
       return {
         connect: { id: it },
       };
@@ -43,8 +53,10 @@ export function transformTaskForUpdate(data: UpdateTaskInput) {
   return matcher.data;
 }
 
-function isCreateTargetInput(data: any): data is CreateTargetInput {
-  return !!data.tag;
+function isCreateTargetInput(
+  data: any,
+): data is CreateTargetInput {
+  return !!data.project;
 }
 
 export function transformTargetForDb(
@@ -56,7 +68,7 @@ export function transformTargetForDb(
     .when(
       isCreateTargetInput(data),
       (that) => {
-        (that as any).editValue('tag', (it) => {
+        (that as any).editValue('project', (it) => {
           return { connect: { id: it } };
         });
       },
@@ -66,18 +78,24 @@ export function transformTargetForDb(
   return matcher.data;
 }
 
-export function transformTargetToClient(data: Target | Target[]) {
+export function transformTargetToClient(
+  data: Target | Target[],
+) {
   const matcher = new Matcher(data);
-  matcher.editValue('date', handleFormatter).delete(['createdAt', 'updatedAt']);
+  matcher
+    .editValue('date', handleFormatter)
+    .delete(['createdAt', 'updatedAt']);
 
   return matcher.data;
 }
 
-interface TagWithTasks extends Tag {
+interface ProjectWithTasks extends Project {
   tasks: Task[];
 }
 
-export function transformTagsToClient(data: TagWithTasks[]) {
+export function transformTagsToClient(
+  data: ProjectWithTasks[],
+) {
   const matcher = new Matcher(data);
   matcher
     .editValue('tasks', (it) => transformTaskToClient(it))

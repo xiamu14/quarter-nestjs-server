@@ -25,7 +25,7 @@ export class CreateUserDto {
   @IsNotEmpty()
   password: string;
 
-  @ApiProperty({ nullable: true })
+  @ApiProperty({ nullable: true, required: false })
   avatar?: string;
 }
 

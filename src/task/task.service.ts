@@ -7,6 +7,10 @@ import {
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateTaskInput, UpdateTaskInput } from './dto';
 
+interface CreateTaskInputDb extends CreateTaskInput {
+  user: { connect: { id: string } };
+}
+
 @Injectable()
 export class TaskService {
   constructor(private prisma: PrismaService) {}
@@ -15,10 +19,11 @@ export class TaskService {
    * getTaskById
 id: string   */
   public async getTaskById(id?: string) {
-    if (!id) return { errorMessage: 'not Found', data: null };
+    if (!id)
+      return { errorMessage: 'not Found', data: null };
     const task = await this.prisma.task.findUnique({
       where: { id },
-      include: { tag: true },
+      include: { project: true },
     });
     if (task) {
       const taskData = transformTaskToClient(task);
@@ -28,7 +33,7 @@ id: string   */
     }
   }
 
-  public async createTask(data: CreateTaskInput) {
+  public async createTask(data: CreateTaskInputDb) {
     const formatData = transformTaskForCreate(data);
 
     return this.prisma.task.create({ data: formatData });
@@ -41,7 +46,7 @@ id: string   */
       data: formatData,
       where: { id: data.id },
       include: {
-        tag: true,
+        project: true,
       },
     });
   }

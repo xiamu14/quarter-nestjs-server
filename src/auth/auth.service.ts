@@ -34,7 +34,7 @@ export class AuthService {
   async register(userDto: CreateUserDto) {
     let status: RegistrationStatus = {
       success: true,
-      message: 'ACCOUNT_CREATE_SUCCESS',
+      message: 'account_create_success',
     };
 
     try {
@@ -60,8 +60,12 @@ export class AuthService {
     const token = this._createToken({ sub: user.id });
 
     return {
-      user,
-      token,
+      success: true,
+      message: 'login_success',
+      data: {
+        user,
+        token,
+      },
     };
   }
 
@@ -81,7 +85,7 @@ export class AuthService {
     );
     if (!user) {
       throw new HttpException(
-        'INVALID_TOKEN',
+        'invalid_token',
         HttpStatus.UNAUTHORIZED,
       );
     }

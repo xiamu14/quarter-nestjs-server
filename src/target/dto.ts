@@ -6,7 +6,7 @@ export class CreateTargetInput {
   name: string;
 
   @ApiProperty({ type: 'string', description: '项目 ID' })
-  tag: string;
+  project: string;
 
   @ApiProperty({ type: 'string' })
   userId: string;

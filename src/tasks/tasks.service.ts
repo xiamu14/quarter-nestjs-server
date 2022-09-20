@@ -26,7 +26,7 @@ export class TasksService {
         },
         userId: query.userId,
       },
-      include: { tag: true },
+      include: { project: true },
     });
     return data.length > 0
       ? transformTaskToClient(data)
@@ -52,7 +52,7 @@ export class TasksService {
         },
         userId: query.userId,
       },
-      include: { tag: true },
+      include: { project: true },
     });
     return data.length > 0
       ? transformTaskToClient(data)
