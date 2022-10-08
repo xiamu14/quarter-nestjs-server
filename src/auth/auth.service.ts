@@ -39,7 +39,7 @@ export class AuthService {
 
     try {
       const user = await this.usersService.create(userDto);
-      const token = this._createToken({ sub: user.id });
+      const token = this.createToken({ sub: user.id });
       status.data = { user, token };
     } catch (error) {
       status = {
@@ -57,7 +57,7 @@ export class AuthService {
     );
 
     // generate and sign token
-    const token = this._createToken({ sub: user.id });
+    const token = this.createToken({ sub: user.id });
 
     return {
       success: true,
@@ -69,7 +69,7 @@ export class AuthService {
     };
   }
 
-  private _createToken({ sub }: JwtPayload): any {
+  public createToken({ sub }: { sub: string }): any {
     const Authorization = this.jwtService.sign({
       sub,
     });
@@ -79,10 +79,8 @@ export class AuthService {
     };
   }
 
-  async validateUser(payload: JwtPayload): Promise<any> {
-    const user = await this.usersService.findByPayload(
-      payload,
-    );
+  async validateUser({ sub }: JwtPayload): Promise<any> {
+    const user = await this.usersService.findByPayload(sub);
     if (!user) {
       throw new HttpException(
         'invalid_token',
