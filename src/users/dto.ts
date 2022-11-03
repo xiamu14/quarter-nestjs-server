@@ -35,6 +35,9 @@ export class UpdateUserDto {
 
   @ApiProperty({ nullable: true })
   name?: string;
+
+  @ApiProperty({ nullable: true })
+  email?: string;
 }
 
 export class UpdatePasswordDto {

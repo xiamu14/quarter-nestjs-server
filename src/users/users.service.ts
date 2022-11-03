@@ -3,9 +3,14 @@ import {
   HttpStatus,
   Injectable,
 } from '@nestjs/common';
+import { User } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from './../prisma/prisma.service';
-import { CreateUserDto, LoginUserDto } from './dto';
+import {
+  CreateUserDto,
+  LoginUserDto,
+  UpdateUserDto,
+} from './dto';
 
 const { hash } = bcrypt;
 
@@ -42,6 +47,17 @@ export class UsersService {
       },
     });
     return rest;
+  }
+
+  async update(
+    id: string,
+    userDto: UpdateUserDto,
+  ): Promise<User> {
+    const user = await this.prisma.user.update({
+      where: { id },
+      data: userDto,
+    });
+    return user;
   }
 
   async findByEmail({ email, password }: LoginUserDto) {
