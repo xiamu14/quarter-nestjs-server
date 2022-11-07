@@ -33,6 +33,13 @@ export class CreateTaskInput {
     description: 'project Id',
   })
   project: string;
+
+  @ApiProperty({
+    type: 'string',
+    description: 'target Id',
+    required: false,
+  })
+  target?: string;
 }
 
 export class UpdateTaskInput {
@@ -71,4 +78,11 @@ export class UpdateTaskInput {
     required: false,
   })
   project?: string;
+
+  @ApiProperty({
+    type: 'string',
+    description: 'target Id',
+    required: false,
+  })
+  target?: string;
 }

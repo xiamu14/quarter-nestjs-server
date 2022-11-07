@@ -34,6 +34,11 @@ export function transformTaskForCreate(
       return {
         connect: { id: it },
       };
+    })
+    .editValue('target', (it) => {
+      return {
+        connect: { id: it },
+      };
     });
   return matcher.data;
 }
@@ -45,6 +50,11 @@ export function transformTaskForUpdate(
   matcher
     .editValue('date', (it) => (it ? new Date(it) : it))
     .editValue('project', (it) => {
+      return {
+        connect: { id: it },
+      };
+    })
+    .editValue('target', (it) => {
       return {
         connect: { id: it },
       };
