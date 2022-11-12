@@ -1,6 +1,24 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { ProjectStatus } from '@prisma/client';
 
+export class GetProjectInput {
+  @ApiProperty({ type: 'string' })
+  id: string;
+
+  @ApiProperty({ type: 'string', nullable: true })
+  from: string;
+
+  @ApiProperty({ type: 'string', nullable: true })
+  to: string;
+
+  @ApiProperty({
+    enum: ProjectStatus,
+    default: ProjectStatus.Doing,
+    example: ProjectStatus.Doing,
+  })
+  status: string;
+}
+
 export class CreateProjectInput {
   @ApiProperty({ type: 'string' })
   name: string;

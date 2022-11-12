@@ -1,17 +1,20 @@
 import {
   Body,
   Controller,
+  Get,
   Post,
   Put,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiBody,
+  ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
-import { User } from '@prisma/client';
+import { ProjectStatus, User } from '@prisma/client';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import {
   CreateProjectInput,
@@ -23,6 +26,38 @@ import { ProjectService } from './project.service';
 @Controller('project')
 export class ProjectController {
   constructor(private readonly service: ProjectService) {}
+
+  @Get('/')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiQuery({
+    enum: ProjectStatus,
+    name: 'status',
+  })
+  @ApiQuery({
+    name: 'id',
+    required: true,
+    type: 'string',
+  })
+  async get(
+    @Req()
+    req: { user: User },
+    @Query('status')
+    status: ProjectStatus,
+    @Query('id')
+    id: string,
+    @Query('from')
+    from: string,
+    @Query('to')
+    to: string,
+  ) {
+    return this.service.get({
+      id,
+      status,
+      from,
+      to,
+    });
+  }
 
   @Post('/')
   @UseGuards(JwtAuthGuard)
