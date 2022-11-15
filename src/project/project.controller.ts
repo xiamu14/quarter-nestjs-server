@@ -40,8 +40,6 @@ export class ProjectController {
     type: 'string',
   })
   async get(
-    @Req()
-    req: { user: User },
     @Query('status')
     status: ProjectStatus,
     @Query('id')

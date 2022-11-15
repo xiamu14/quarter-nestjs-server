@@ -1,5 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { ProjectStatus } from '@prisma/client';
+import {
+  ProjectStatus,
+  TargetStatus,
+} from '@prisma/client';
 import { transformTagsToClient } from '../lib/utils';
 import { PrismaService } from '../prisma/prisma.service';
 
@@ -19,7 +22,11 @@ export class ProjectsService {
             priority: 'desc',
           },
         },
-        targets: true,
+        targets: {
+          where: {
+            status: TargetStatus.Doing,
+          },
+        },
       },
       orderBy: {
         createdAt: 'asc',

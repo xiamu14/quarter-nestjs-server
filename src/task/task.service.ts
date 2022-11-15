@@ -23,7 +23,7 @@ id: string   */
       return { errorMessage: 'not Found', data: null };
     const task = await this.prisma.task.findUnique({
       where: { id },
-      include: { project: true },
+      include: { project: true, target: true },
     });
     if (task) {
       const taskData = transformTaskToClient(task);
