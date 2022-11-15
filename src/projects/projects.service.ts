@@ -21,6 +21,9 @@ export class ProjectsService {
           orderBy: {
             priority: 'desc',
           },
+          where: {
+            date: null,
+          },
         },
         targets: {
           where: {
