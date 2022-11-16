@@ -54,11 +54,18 @@ export function transformTaskForUpdate(
         connect: { id: it },
       };
     })
-    .editValue('target', (it) => {
-      return {
-        connect: { id: it },
-      };
-    });
+    .when(
+      !!data.target,
+      (that) => {
+        that.editValue('target', (it) => {
+          return {
+            connect: { id: it },
+          };
+        });
+      },
+      null,
+    )
+    .clean([null]);
 
   return matcher.data;
 }
