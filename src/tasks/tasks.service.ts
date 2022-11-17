@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { Status } from '@prisma/client';
 import * as dayjs from 'dayjs';
 import { transformTaskToClient } from '../lib/utils';
 import { PrismaService } from '../prisma/prisma.service';
@@ -51,6 +52,23 @@ export class TasksService {
           lte,
         },
         userId: query.userId,
+      },
+      include: { project: true, target: true },
+    });
+    return data.length > 0
+      ? transformTaskToClient(data)
+      : [];
+  }
+
+  async getTasksOverdue(query: { userId: string }) {
+    const lte = new Date();
+    const data = await this.prisma.task.findMany({
+      where: {
+        date: {
+          lte,
+        },
+        userId: query.userId,
+        status: Status.Pending,
       },
       include: { project: true, target: true },
     });

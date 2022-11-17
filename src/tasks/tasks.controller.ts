@@ -55,4 +55,18 @@ export class TasksController {
       day,
     });
   }
+
+  @Get('/overdue')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  async getTasksOverdue(
+    @Req()
+    req: {
+      user: User;
+    },
+  ) {
+    return this.service.getTasksOverdue({
+      userId: req.user.id,
+    });
+  }
 }
