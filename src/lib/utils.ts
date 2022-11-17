@@ -64,8 +64,7 @@ export function transformTaskForUpdate(
         });
       },
       null,
-    )
-    .clean([null]);
+    );
 
   return matcher.data;
 }
