@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import * as dayjs from 'dayjs';
+import { groupBy } from 'lodash';
 import { PrismaService } from '../prisma/prisma.service';
-import { getWeekStamp } from '../utils/date';
+import { getWeekStamp, getYear } from '../utils/date';
 
 @Injectable()
 export class StatisticsService {
@@ -48,5 +49,21 @@ export class StatisticsService {
       },
     });
     return projects;
+  }
+
+  // 获取一年里每天任务耗时情况
+  public async getYearTasks(query: { userId: string }) {
+    const { start, end } = getYear(dayjs());
+    const tasks = await this.prisma.task.findMany({
+      where: {
+        userId: query.userId,
+        date: {
+          gte: new Date(start.valueOf()),
+          lte: new Date(end.valueOf()),
+        },
+      },
+    });
+    const groupedTasks = groupBy(tasks, 'date');
+    return groupedTasks;
   }
 }

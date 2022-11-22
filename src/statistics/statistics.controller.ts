@@ -39,4 +39,18 @@ export class StatisticsController {
       userId: req.user.id,
     });
   }
+
+  @Get('/yearTasks')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  async getYearTasks(
+    @Req()
+    req: {
+      user: User;
+    },
+  ) {
+    return this.service.getYearTasks({
+      userId: req.user.id,
+    });
+  }
 }

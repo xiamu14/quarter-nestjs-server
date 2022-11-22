@@ -21,3 +21,10 @@ export function getWeekStamp(day: Dayjs) {
   );
   return { monday: gte, sunday: lte };
 }
+
+export function getYear(day: Dayjs) {
+  return {
+    start: day.startOf('year'),
+    end: day.endOf('year'),
+  };
+}
