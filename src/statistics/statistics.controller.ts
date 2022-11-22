@@ -1,5 +1,12 @@
-import { Controller, Get } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import {
+  Controller,
+  Get,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { User } from '@prisma/client';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { StatisticsService } from './statistics.service';
 
 @ApiTags('Statistics')
@@ -8,7 +15,28 @@ export class StatisticsController {
   constructor(private service: StatisticsService) {}
 
   @Get('/total')
-  async getTotal() {
-    return this.service.getTotal();
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  async getTotal(
+    @Req()
+    req: {
+      user: User;
+    },
+  ) {
+    return this.service.getTotal({ userId: req.user.id });
+  }
+
+  @Get('/projectTasks')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  async getProjectTasks(
+    @Req()
+    req: {
+      user: User;
+    },
+  ) {
+    return this.service.getProjectTasks({
+      userId: req.user.id,
+    });
   }
 }
