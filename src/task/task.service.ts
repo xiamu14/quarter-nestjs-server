@@ -41,12 +41,12 @@ id: string   */
 
   public async updateTask(data: UpdateTaskInput) {
     const formatData = transformTaskForUpdate(data);
-
     return this.prisma.task.update({
       data: formatData,
       where: { id: data.id },
       include: {
         project: true,
+        target: true,
       },
     });
   }

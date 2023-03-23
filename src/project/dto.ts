@@ -12,6 +12,13 @@ export class GetProjectInput {
   to: string;
 
   @ApiProperty({
+    type: 'string',
+    nullable: true,
+    required: false,
+  })
+  target?: string;
+
+  @ApiProperty({
     enum: ProjectStatus,
     default: ProjectStatus.Doing,
     example: ProjectStatus.Doing,
@@ -38,9 +45,17 @@ export class UpdateProjectInput {
   })
   status?: ProjectStatus;
 
-  @ApiProperty({ type: 'string', nullable: true })
+  @ApiProperty({
+    type: 'string',
+    nullable: true,
+    required: false,
+  })
   name?: string;
 
-  @ApiProperty({ type: 'string', nullable: true })
+  @ApiProperty({
+    type: 'string',
+    nullable: true,
+    required: false,
+  })
   color?: string;
 }

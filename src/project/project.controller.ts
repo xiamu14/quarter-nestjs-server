@@ -39,6 +39,11 @@ export class ProjectController {
     required: true,
     type: 'string',
   })
+  @ApiQuery({
+    name: 'target',
+    required: false,
+    type: 'string',
+  })
   async get(
     @Query('status')
     status: ProjectStatus,
@@ -48,12 +53,15 @@ export class ProjectController {
     from: string,
     @Query('to')
     to: string,
+    @Query('target')
+    target: string,
   ) {
     return this.service.get({
       id,
       status,
       from,
       to,
+      target,
     });
   }
 

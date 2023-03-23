@@ -55,7 +55,7 @@ export function transformTaskForUpdate(
       };
     })
     .when(
-      !!data.target,
+      'target' in data,
       (that) => {
         that.editValue('target', (it) => {
           return {
@@ -63,7 +63,13 @@ export function transformTaskForUpdate(
           };
         });
       },
-      null,
+      (that) => {
+        that.add('target', () => {
+          return {
+            disconnect: true,
+          };
+        });
+      },
     );
 
   return matcher.data;

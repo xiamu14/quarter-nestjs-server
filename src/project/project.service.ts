@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import {
   CreateProjectInput,
@@ -17,16 +18,20 @@ export class ProjectService {
   get(data: GetProjectInput) {
     const gte = new Date(parseInt(data.from, 10));
     const lte = new Date(parseInt(data.to, 10));
+    const where: Prisma.TaskWhereInput = {
+      date: {
+        gte,
+        lte,
+      },
+    };
+    if (data.target) {
+      where.targetId = data.target;
+    }
     return this.prisma.project.findUnique({
       where: { id: data.id },
       include: {
         tasks: {
-          where: {
-            date: {
-              gte,
-              lte,
-            },
-          },
+          where,
         },
       },
     });
