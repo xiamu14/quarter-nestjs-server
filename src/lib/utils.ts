@@ -47,6 +47,7 @@ export function transformTaskForUpdate(
   data: UpdateTaskInput,
 ) {
   const matcher = new Matcher(data);
+  console.log('debug', Boolean(data?.target), data?.target);
   matcher
     .editValue('date', (it) => (it ? new Date(it) : it))
     .editValue('project', (it) => {
@@ -55,7 +56,7 @@ export function transformTaskForUpdate(
       };
     })
     .when(
-      'target' in data,
+      Boolean(data?.target),
       (that) => {
         that.editValue('target', (it) => {
           return {
@@ -64,11 +65,15 @@ export function transformTaskForUpdate(
         });
       },
       (that) => {
-        that.add('target', () => {
-          return {
-            disconnect: true,
-          };
-        });
+        if ('target' in data) {
+          that.delete(['target']);
+        } else {
+          that.add('target', () => {
+            return {
+              disconnect: true,
+            };
+          });
+        }
       },
     );
 

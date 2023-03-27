@@ -73,7 +73,7 @@ export class TaskController {
       await this.service.updateTask(updateTaskInput);
       return { data: 'success' };
     } catch (error) {
-      // console.error(error);
+      console.error(error);
       return { errMessage: 'update fail' };
     }
   }
