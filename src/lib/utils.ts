@@ -29,6 +29,12 @@ export function transformTaskForCreate(
 ) {
   const matcher = new Matcher(data);
   matcher
+    .when(
+      Boolean(data?.date),
+      (that) =>
+        that.editValue('date', (it) => new Date(it)),
+      (that) => that.delete(['date']), // 容错处理
+    )
     .editValue('date', (it) => (it ? new Date(it) : it))
     .editValue('project', (it) => {
       return {
