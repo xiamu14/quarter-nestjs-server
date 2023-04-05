@@ -25,11 +25,13 @@ export class JwtStrategy extends PassportStrategy(
   }
 
   async validate(payload: JwtPayload): Promise<any> {
-    console.log('payload', payload);
-    const expDate = dayjs(
+    const expFormat = dayjs(
       new Date(0).setUTCSeconds(payload.exp),
     );
-    console.log('format', expDate.format('YYYY-MM-DD'));
-    return { id: payload.sub, exp: payload.exp };
+    return {
+      id: payload.sub,
+      exp: payload.exp,
+      expFormat: expFormat.format('YYYY-MM-DD'),
+    };
   }
 }

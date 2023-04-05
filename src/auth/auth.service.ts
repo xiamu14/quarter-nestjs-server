@@ -7,7 +7,6 @@ import { JwtService } from '@nestjs/jwt';
 import { User } from '@prisma/client';
 import { CreateUserDto, LoginUserDto } from '../users/dto';
 import { UsersService } from './../users/users.service';
-import { JwtPayload } from './jwt.strategy';
 
 type UserClient = Omit<User, 'password'>;
 
@@ -25,6 +24,10 @@ export interface RegistrationSeederStatus {
   data?: UserClient[];
 }
 
+interface Params {
+  sub: string;
+}
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -34,7 +37,7 @@ export class AuthService {
   async register(userDto: CreateUserDto) {
     let status: RegistrationStatus = {
       success: true,
-      message: 'account_create_success',
+      message: 'account create success',
     };
 
     try {
@@ -69,7 +72,7 @@ export class AuthService {
     };
   }
 
-  public createToken({ sub }: { sub: string }): any {
+  public createToken({ sub }: Params) {
     const Authorization = this.jwtService.sign({
       sub,
     });
@@ -79,8 +82,10 @@ export class AuthService {
     };
   }
 
-  async validateUser({ sub }: JwtPayload): Promise<any> {
-    const user = await this.usersService.findByPayload(sub);
+  async validateUser(data: Params) {
+    const user = await this.usersService.findByPayload(
+      data,
+    );
     if (!user) {
       throw new HttpException(
         'invalid_token',
@@ -88,5 +93,15 @@ export class AuthService {
       );
     }
     return user;
+  }
+
+  async validateAndRefresh(data: Params) {
+    try {
+      const user = await this.validateUser(data);
+      const token = await this.createToken(data);
+      return { ...user, token };
+    } catch (error) {
+      return Promise.reject(error);
+    }
   }
 }

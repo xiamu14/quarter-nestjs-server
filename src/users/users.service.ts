@@ -86,7 +86,7 @@ export class UsersService {
     return rest;
   }
 
-  async findByPayload({ sub }: any): Promise<any> {
+  async findByPayload({ sub }: { sub: string }) {
     const { password: _, ...rest } =
       await this.prisma.user.findUnique({
         where: { id: sub },

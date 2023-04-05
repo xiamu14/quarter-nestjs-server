@@ -1,5 +1,6 @@
 import {
   Body,
+  ClassSerializerInterceptor,
   Controller,
   Get,
   HttpException,
@@ -7,8 +8,14 @@ import {
   Post,
   Request,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import { User } from '@prisma/client';
 import * as dayjs from 'dayjs';
 import { CreateUserDto, LoginUserDto } from '../users/dto';
 import {
@@ -16,6 +23,15 @@ import {
   RegistrationStatus,
 } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
+
+type MeResponse =
+  | Omit<User, 'password'>
+  | {
+      token: {
+        expiresIn: string;
+        Authorization: string;
+      };
+    };
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -48,7 +64,7 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   public verify(@Request() req) {
-    console.log('verify req', req.user);
+    // console.log('verify req', req.user);
     const expDate = dayjs(
       new Date(0).setUTCSeconds(req.user.exp),
     ); // 僅將最外層的`new Date`改成`dayjs`即可無痛轉換成`dayjs`格式
@@ -64,17 +80,20 @@ export class AuthController {
     };
   }
 
-  @Get('refresh')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  public refresh(@Request() req) {
-    console.log('verify req', req.user);
-    const token = this.authService.createToken({
-      sub: req.user.id,
-    });
-    return {
-      success: true,
-      data: { token },
-    };
+  @UseInterceptors(ClassSerializerInterceptor)
+  @Get('me')
+  @ApiOkResponse({
+    description:
+      '判断 token 是否有效，有效则自动刷新，并返回 user 信息',
+  })
+  public async me(@Request() req): Promise<MeResponse> {
+    console.log('me', req.user);
+    const result =
+      await this.authService.validateAndRefresh({
+        sub: req.user.id,
+      });
+    return result;
   }
 }

@@ -1,12 +1,9 @@
 import {
   Body,
-  ClassSerializerInterceptor,
   Controller,
-  Get,
   Post,
   Request,
   UseGuards,
-  UseInterceptors,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -24,18 +21,6 @@ export class UsersController {
   constructor(
     private readonly usersService: UsersService,
   ) {}
-
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
-  @UseInterceptors(ClassSerializerInterceptor)
-  @Get('me')
-  public async me(@Request() req): Promise<User> {
-    const user = await this.usersService.findByPayload({
-      sub: req.user.id,
-    });
-    console.log('me req', req.user, user);
-    return { ...req.user, ...user };
-  }
 
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
