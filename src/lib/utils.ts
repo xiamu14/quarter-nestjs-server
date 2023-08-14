@@ -53,8 +53,13 @@ export function transformTaskForUpdate(
   data: UpdateTaskInput,
 ) {
   const matcher = new Matcher(data);
-  console.log('debug', Boolean(data?.target), data?.target);
   matcher
+    .when(
+      Boolean(data?.date),
+      (that) =>
+        that.editValue('date', (it) => new Date(it)),
+      (that) => that.delete(['date']), // 容错处理
+    )
     .editValue('date', (it) => (it ? new Date(it) : it))
     .editValue('project', (it) => {
       return {
